@@ -17,6 +17,7 @@ import (
 	"github.com/Azure/azure-kusto-go/kusto/data/types"
 	"github.com/Azure/azure-kusto-go/kusto/data/value"
 	ilog "github.com/Azure/azure-kusto-go/kusto/internal/log"
+	"github.com/Azure/azure-kusto-go/kusto/kql"
 	"github.com/Azure/azure-kusto-go/kusto/unsafe"
 
 	"github.com/google/uuid"
@@ -183,7 +184,7 @@ func (p ParamType) string() string {
 			return p.name + ":string"
 		}
 		v := p.Default.(string)
-		return fmt.Sprintf(`%s:string = "%s"`, p.name, v) // TODO - escape the string when we have the functionaity
+		return fmt.Sprintf(`%s:string = %s`, p.name, kql.QuoteString(v, false))
 	case types.Timespan:
 		if p.Default == nil {
 			return p.name + ":timespan"
